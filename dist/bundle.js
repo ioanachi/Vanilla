@@ -64,7 +64,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "#text {\n  border: 1px solid #c3c3c3;\n  min-height: 200px;\n  width: 100%;\n  background-color: #ffe8e8; }\n  #text .container {\n    width: 320px;\n    margin: 0 auto; }\n  #text .bubble-message {\n    cursor: pointer;\n    display: block;\n    background-color: #FFE04F;\n    margin: 20px;\n    border: 0;\n    padding: 10px 5px 10px 25px;\n    position: relative;\n    border-bottom: 3px #FFE04F solid; }\n    #text .bubble-message button {\n      float: right;\n      top: 0px;\n      left: 0px;\n      border: 0;\n      color: white;\n      cursor: pointer;\n      background-color: #ee0020;\n      min-width: 10px;\n      min-height: 10px; }\n  #text .bottom:before {\n    content: \"\";\n    bottom: -23px;\n    cursor: pointer;\n    position: absolute;\n    border-color: #FFE04F transparent transparent transparent;\n    border-style: solid;\n    border-width: 10px; }\n\nform {\n  display: block; }\n  form input {\n    margin-top: 10px;\n    display: block; }\n  form textarea {\n    margin-top: 10px;\n    display: block; }\n  form button {\n    margin-top: 30px; }\n", ""]);
+exports.push([module.i, "#text {\n  border: 1px solid #c3c3c3;\n  min-height: 200px;\n  width: 100%;\n  background-color: #ffe8e8; }\n  #text .container {\n    width: 320px;\n    margin: 0 auto; }\n  #text .bubble-message {\n    cursor: pointer;\n    display: block;\n    background-color: #FFE04F;\n    margin: 20px;\n    border: 0;\n    padding: 10px 5px 10px 25px;\n    position: relative;\n    border-bottom: 3px #FFE04F solid; }\n    #text .bubble-message button {\n      float: right;\n      top: 0px;\n      left: 0px;\n      border: 0;\n      cursor: pointer;\n      min-width: 10px;\n      min-height: 10px; }\n      #text .bubble-message button.delbtn {\n        color: white;\n        background-color: #e40a0a; }\n      #text .bubble-message button.updatebtn {\n        color: black;\n        background-color: #16f0cc;\n        margin-right: 4px; }\n  #text .bottom:before {\n    content: \"\";\n    bottom: -23px;\n    cursor: pointer;\n    position: absolute;\n    border-color: #FFE04F transparent transparent transparent;\n    border-style: solid;\n    border-width: 10px; }\n\nform {\n  display: block; }\n  form input {\n    margin-top: 10px;\n    display: block; }\n  form textarea {\n    margin-top: 10px;\n    display: block; }\n  form button {\n    margin-top: 30px; }\n\n.titleUpdate {\n  display: block; }\n", ""]);
 
 // exports
 
@@ -618,16 +618,21 @@ console.log(textZone);
 
 var titleName;
 var descriptionValue;
+function getRandomArbitrary(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 
 function showTxt(event) {
     titleName = title.value;
     descriptionValue = description.value;
-    var displayTxt = '<div class="bubble-message bottom" ><button class="delbtn">X</button> <b> ' + titleName + '</b></br>' + descriptionValue + '</div>';
+    var displayTxt = '<div class="bubble-message bottom" ><button class="delbtn">X</button><button class="updatebtn">Update</button> <b> ' + titleName + '</b></br>' + descriptionValue + '</div>';
 
     var containerBox = ' <div class="container" id="containerBox">' + displayTxt + '</div>';
     textZone.innerHTML += displayTxt;
     var insideBtn = textZone.getElementsByClassName("delbtn");
+    var updateBtn = textZone.getElementsByClassName("updatebtn");
     insideBtn = Array.from(insideBtn);
+    updateBtn = Array.from(updateBtn);
 
     insideBtn.forEach(function (item) {
         item.addEventListener('click', function (event) {
@@ -642,8 +647,29 @@ function showTxt(event) {
 
     smallChatBox.forEach(function (element) {
         element.addEventListener('click', function (event) {
-            event.target.style.backgroundColor = "blue";
-            console.log(event.target, "hjbjkytfcytcytf");
+            var randNr1 = getRandomArbitrary(0, 256);
+            var randNr2 = getRandomArbitrary(0, 256);
+            var randNr3 = getRandomArbitrary(0, 256);
+
+            console.log(randNr1, randNr2, randNr3);
+            var ClickedDiv = event.target;
+
+            ClickedDiv.style.backgroundColor = "rgb(" + randNr1 + "," + randNr2 + "," + randNr3 + ")";
+            var styleElem = event.target.appendChild(document.createElement("style"));
+            //    styleElem.innerHTML = "body #text .bottom:before {border-color:  1px solid  rgb(" + randNr1 + "," + randNr2 + "," + randNr3 + ");}";
+        });
+    });
+
+    updateBtn.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            var txtContainingBox = e.currentTarget.parentElement.outerHTML;
+            var insideTxt = txtContainingBox.split('<b>')[1];
+            var insideTitle = insideTxt.split('</b>')[0];
+            var insideDescr = insideTxt.split('<br>')[1];
+            insideDescr = insideDescr.split('</d')[0];
+            var updateForm = document.createElement("form");
+            updateForm.innerHTML = '<input type="text" id="titleUpdate">' + insideTitle + '<textarea type="text" id="descriptUpdate" rows="4" cols="50">' + insideDescr + '</textarea><button type="button" id="updateBtn"> Update </button> ';
+            document.body.appendChild(updateForm);
         });
     });
 }
