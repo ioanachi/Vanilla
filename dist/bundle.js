@@ -625,7 +625,7 @@ function getRandomArbitrary(min, max) {
 function showTxt(event) {
     titleName = title.value;
     descriptionValue = description.value;
-    var displayTxt = '<div class="bubble-message bottom" ><button class="delbtn">X</button><button class="updatebtn">Select</button> <b> ' + titleName + '</b></br>' + descriptionValue + '</div>';
+    var displayTxt = '<div class="bubble-message bottom" ><button class="delbtn">X</button><button class="updatebtn">Select</button> <p><b> ' + titleName + '</b></p><p>' + descriptionValue + '</p></div>';
 
     var containerBox = ' <div class="container" id="containerBox">' + displayTxt + '</div>';
     textZone.innerHTML += displayTxt;
@@ -663,23 +663,27 @@ function showTxt(event) {
     updateButton.forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             console.log("outside");
+            var insideBox = e.currentTarget.parentElement;
+            // console.log(insideTxt, "outside CB");
+
+            // var txtContainingBox = insideBox.outerHTML;
+
+            // var insideTxt = txtContainingBox.split('<b>')[1];
+            // var insideTitle = insideTxt.split('</b>')[0];
+            // var insideDescr = insideTxt.split('<br>')[1];
+            // insideDescr = insideDescr.split('<')[0];
+            // var updateForm = document.createElement("form");
+
 
             if (!ContainingBox) {
-                console.log("inside");
-                ContainingBox = e.currentTarget.parentElement;
-                var txtContainingBox = ContainingBox.outerHTML;
+                button.innerHTML = "Update";
+                ContainingBox = insideBox;
 
-                var insideTxt = txtContainingBox.split('<b>')[1];
-                var insideTitle = insideTxt.split('</b>')[0];
-                var insideDescr = insideTxt.split('<br>')[1];
-                insideDescr = insideDescr.split('<')[0];
-                var updateForm = document.createElement("form");
-                console.log(insideDescr);
+                console.log(ContainingBox.children[2].textContent, ContainingBox.children[3].textContent, "inside CB");
+                title.value = ContainingBox.children[2].textContent;
 
-                description.value = insideDescr;
-                title.value = insideTitle;
-
-                e.currentTarget.innerHTML = "Unselect";
+                description.value = ContainingBox.children[3].textContent;
+                e.currentTarget.innerHTML = "Deselect";
 
                 // console.log(updateForm);
 
@@ -689,19 +693,21 @@ function showTxt(event) {
 
                 e.currentTarget.parentElement.style.backgroundColor = "rgb(255,0,0)";
             } else {
-                e.currentTarget.innerHTML = "Select";
-                ContainingBox.style = "";
+                descriptionValue = description.value;
+                console.log(descriptionValue, "descriptionValue");
 
+                e.currentTarget.innerHTML = "Select";
+                ContainingBox.style = null;
+                button.innerHTML = "Insert";
                 ContainingBox = null;
+                description.value = "";
+                title.value = '';
             }
         });
     });
     if (!ContainingBox) {
-        button.innerHTML = "Update";
         updateBtn.innerHTML = "Select";
-    } else {
-        button.innerHTML = "Insert";
-    };
+    } else {};
 }
 function resetInputValue(event) {
     showTxt();

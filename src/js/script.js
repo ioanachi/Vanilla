@@ -16,8 +16,8 @@ function getRandomArbitrary(min, max) {
 function showTxt(event) {
     titleName = title.value;
     descriptionValue = description.value;
-    var displayTxt = '<div class="bubble-message bottom" ><button class="delbtn">X</button><button class="updatebtn">Select</button> <b> ' + titleName + '</b></br>' +
-        descriptionValue + '</div>';
+    var displayTxt = '<div class="bubble-message bottom" ><button class="delbtn">X</button><button class="updatebtn">Select</button> <p><b> ' + titleName + '</b></p><p>' +
+      descriptionValue + '</p></div>';
 
     var containerBox = ' <div class="container" id="containerBox">' + displayTxt + '</div>';
     textZone.innerHTML += displayTxt;
@@ -61,70 +61,63 @@ function showTxt(event) {
     updateButton.forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             console.log("outside");
-
-if(!ContainingBox){
-    console.log("inside");
-    ContainingBox =  e.currentTarget.parentElement;
-             var txtContainingBox =ContainingBox.outerHTML;
-
-            var insideTxt = txtContainingBox.split('<b>')[1];
-            var insideTitle = insideTxt.split('</b>')[0];
-            var insideDescr = insideTxt.split('<br>')[1];
-            insideDescr = insideDescr.split('<')[0];
-            var updateForm = document.createElement("form");
-            console.log(insideDescr);
-
-            description.value = insideDescr;
-            title.value = insideTitle;
-
-            e.currentTarget.innerHTML = "Unselect";
+            var insideBox = e.currentTarget.parentElement;
+            // console.log(insideTxt, "outside CB");
             
+            // var txtContainingBox = insideBox.outerHTML;
+
+            // var insideTxt = txtContainingBox.split('<b>')[1];
+            // var insideTitle = insideTxt.split('</b>')[0];
+            // var insideDescr = insideTxt.split('<br>')[1];
+            // insideDescr = insideDescr.split('<')[0];
+            // var updateForm = document.createElement("form");
 
 
 
-            // console.log(updateForm);
+            if (!ContainingBox) {
+                button.innerHTML = "Update";
+                ContainingBox = insideBox;
+                
+                console.log(ContainingBox.children[2].textContent,ContainingBox.children[3].textContent , "inside CB");
+                title.value = ContainingBox.children[2].textContent;
+                
+                description.value = ContainingBox.children[3].textContent ;
+                e.currentTarget.innerHTML = "Deselect";
 
-            // updateForm.innerHTML = '<input type="text" id="titleUpdate">'+insideTitle +'<textarea type="text" id="descriptUpdate" rows="4" cols="50">'
-            // +insideDescr +'</textarea><button type="button" id="updateBtn"> Update </button> '
-            // document.body.appendChild(updateForm);
+                // console.log(updateForm);
 
-            e.currentTarget.parentElement.style.backgroundColor = "rgb(255,0,0)";
-}else{
-    e.currentTarget.innerHTML = "Select";
-    ContainingBox.style = "";
-    
-    ContainingBox = null;
-    
-}
+                // updateForm.innerHTML = '<input type="text" id="titleUpdate">'+insideTitle +'<textarea type="text" id="descriptUpdate" rows="4" cols="50">'
+                // +insideDescr +'</textarea><button type="button" id="updateBtn"> Update </button> '
+                // document.body.appendChild(updateForm);
 
-
-
-
+                e.currentTarget.parentElement.style.backgroundColor = "rgb(255,0,0)";
+               
+                
+            } else {
+                descriptionValue = description.value;
+                console.log(descriptionValue, "descriptionValue");
+                
+                e.currentTarget.innerHTML = "Select";
+                ContainingBox.style = null;
+                button.innerHTML = "Insert";
+                ContainingBox = null;
+                description.value ="";
+                title.value = '';
+            }
         })
     });
-if(!ContainingBox){
-    button.innerHTML = "Update";
-    updateBtn.innerHTML = "Select";
-    
-}else{
-    button.innerHTML = "Insert";
-    
-};
+    if (!ContainingBox) {
+        updateBtn.innerHTML = "Select";
 
+    } else {
 
-
-
-
+    };
 }
 function resetInputValue(event) {
     showTxt();
     title.value = "";
     description.value = "";
-
-
-
 }
-
 
 button.addEventListener('click', resetInputValue);
 
